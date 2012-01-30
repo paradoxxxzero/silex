@@ -1,2 +1,3 @@
 $ ->
-    $('.silex').silex()
+    $('.silex').silex
+        duration: 750

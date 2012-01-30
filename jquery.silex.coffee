@@ -4,8 +4,8 @@
             settings = $.extend(
                 duration: 5000
                 animation_duration: 500
-                width: 200
-                height: 200
+                width: null
+                height: null
             options)
             @each ->
                 $this = $ @
@@ -16,35 +16,60 @@
                         in_transition: false,
                         settings
                     $this.data 'silex', data
+                $this.css position: 'relative'
+                $this.find('img')
+                    .css(
+                        display: 'block'
+                        margin: '0 auto'
+                    ).load(->
+                        $img = $ @
+                        if data.width
+                            if $img.width() >= data.width
+                                $img.width data.width
+                        else if $img.parent().width() <= $img.width()
+                            $img.parent().width $img.width()
 
-                $this.find('img').wrapAll(
-                    $('<div>')
-                        .addClass('silex-wrapper')
-                        .css
-                            padding: 20
-                            width: settings.width
-                            height: settings.height
-                            display: 'table-cell'
-                            backgroundColor: '#111213'
-                            verticalAlign: 'middle'
-                        .click ->
-                            $this.silex('next')
-                )
-                return if $this.find('img').length <= 1
+                        if data.height
+                            if $img.height() >= data.height
+                                $img.height data.height
+                        else if $img.parent().height() <= $img.height()
+                            $img.parent().height $img.height()
+                    ).wrapAll(
+                        $('<div>')
+                            .addClass('silex-wrapper')
+                            .css
+                                padding: 20
+                                width: settings.width
+                                height: settings.height
+                                display: 'table-cell'
+                                backgroundColor: '#111213'
+                                verticalAlign: 'middle'
+                            .click ->
+                                $this.silex('next')
+                    )
+                if $this.find('img').length <= 1
+                    data.in_transition = true
+                    return
                 $this.find('img:not(:first)').hide()
                 $this.append(
-                    $('<div>').addClass('toolbar').append(
+                    $('<div>')
+                    .addClass('toolbar')
+                    .css(
+                        position: 'absolute'
+                        top: 0
+                        color: 'red'
+                    ).append(
                         $('<a>').text('play').click(-> $this.silex('play')),
                         $('<a>').text('pause').click(-> $this.silex('pause')),
                         $('<a>').text('toggle').click(-> $this.silex('toggle')),
                         $('<a>').text('prev').click(-> $this.silex('prev')),
-                        $('<a>').text('next').click(-> $this.silex('next'))))
+                        $('<a>').text('next').click(-> $this.silex('next')))
+                    )
             .silex('play')
 
         next: ->
             @each ->
                 $this = $ @
-                return if $this.find('img').length <= 1
                 data = $this.data 'silex'
                 return if data.in_transition
                 data.in_transition = true
@@ -58,7 +83,6 @@
         prev: ->
             @each ->
                 $this = $ @
-                return if $this.find('img').length <= 1
                 data = $this.data 'silex'
                 return if data.in_transition
                 data.in_transition = true
@@ -72,7 +96,6 @@
         play: ->
             @each ->
                 $this = $ @
-                return if $this.find('img').length <= 1
                 data = $this.data 'silex'
                 if not data.interval
                     data.interval = setInterval (-> $this.silex('next')), data.duration
@@ -80,7 +103,6 @@
         pause: ->
             @each ->
                 $this = $ @
-                return if $this.find('img').length <= 1
                 data = $this.data 'silex'
                 if data.interval
                     clearInterval data.interval
@@ -89,7 +111,6 @@
         toggle: ->
             @each ->
                 $this = $ @
-                return if $this.find('img').length <= 1
                 data = $this.data 'silex'
                 if data.interval
                     $this.silex('pause')
