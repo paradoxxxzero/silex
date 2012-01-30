@@ -25,7 +25,8 @@
           if (!(data = ($this = $(this)).data('silex'))) {
             data = $.extend({
               interval: null,
-              in_transition: false
+              in_transition: false,
+              in_grid: false
             }, settings);
             $this.data('silex', data);
           }
@@ -50,13 +51,13 @@
               return $img.parent().height($img.height());
             }
           }).wrapAll($('<div>').addClass('silex-wrapper').css({
-            padding: '20px 20px 40px',
+            padding: 20,
             width: settings.width,
             height: settings.height,
             display: 'table-cell',
             backgroundColor: '#111213',
             verticalAlign: 'middle',
-            borderRadius: 5
+            borderRadius: 10
           }).click(function() {
             return $this.silex('next');
           }));
@@ -67,11 +68,14 @@
           $this.find('.silexed:not(:first)').hide();
           $this.append($('<div>').addClass('toolbar').css({
             position: 'absolute',
-            bottom: 5,
+            height: 26,
+            bottom: 10,
             right: -100,
             backgroundColor: 'black',
             borderRadius: 5
-          }).append($('<img>').addClass('prev').attr('src', icons.prev).click(function() {
+          }).append($('<img>').addClass('grid').attr('src', icons.grid).click(function() {
+            return $this.silex('grid');
+          }), $('<img>').addClass('prev').attr('src', icons.prev).click(function() {
             return $this.silex('prev');
           }), $('<img>').addClass('play').attr('src', icons.play).hide().click(function() {
             return $this.silex('play');
@@ -84,25 +88,28 @@
             opacity: .5,
             padding: 5
           }).hover((function() {
-            return $(this).stop().fadeTo(250, .9);
+            return $(this).is(':visible') && $(this).stop().fadeTo(250, .9);
           }), (function() {
-            return $(this).stop().fadeTo(250, .5);
+            return $(this).is(':visible') && $(this).stop().fadeTo(250, .5);
           }));
           return $this.hover((function() {
+            if (data.in_grid) return;
             return $this.find('.toolbar').stop().animate({
-              right: 5
-            }, 250);
+              right: 15
+            }, 500);
           }), (function() {
             return $this.find('.toolbar').stop().animate({
               right: -100
-            }, 250);
+            }, 500);
           }));
         }).silex('play');
       },
       next: function() {
         return this.each(function() {
           var $this, data;
-          if ((data = ($this = $(this)).data('silex')).in_transition) return;
+          if ((data = ($this = $(this)).data('silex')).in_transition || data.in_grid) {
+            return;
+          }
           data.in_transition = true;
           return $this.find('.silexed:visible').fadeOut(data.animation_duration, function() {
             var next;
@@ -117,7 +124,9 @@
       prev: function() {
         return this.each(function() {
           var $this, data;
-          if ((data = ($this = $(this)).data('silex')).in_transition) return;
+          if ((data = ($this = $(this)).data('silex')).in_transition || data.in_grid) {
+            return;
+          }
           data.in_transition = true;
           return $this.find('.silexed:visible').fadeOut(data.animation_duration, function() {
             var prev;
@@ -134,8 +143,8 @@
           var $this, data;
           data = ($this = $(this)).data('silex');
           if (!data.interval) {
-            $this.find('.play').hide();
-            $this.find('.pause').show();
+            $this.find('.play').stop().hide();
+            $this.find('.pause').stop().show();
             return data.interval = setInterval((function() {
               return $this.silex('next');
             }), data.duration);
@@ -147,8 +156,8 @@
           var $this, data;
           data = ($this = $(this)).data('silex');
           if (data.interval) {
-            $this.find('.pause').hide();
-            $this.find('.play').show();
+            $this.find('.pause').stop().hide();
+            $this.find('.play').stop().show();
             clearInterval(data.interval);
             return data.interval = null;
           }
@@ -163,6 +172,79 @@
           } else {
             return $this.silex('play');
           }
+        });
+      },
+      grid: function() {
+        return this.each(function() {
+          var $this, $thm, cols, data, img, len, rows, th;
+          data = ($this = $(this)).data('silex');
+          if (data.in_grid) return;
+          data.in_grid = true;
+          $this.find('.toolbar').stop().animate({
+            right: -100
+          }, 500);
+          if (($thm = $this.find('.thumbs')).length) {
+            $thm.animate({
+              top: 0
+            }, 500);
+            return;
+          }
+          len = $this.find('.silexed').length;
+          cols = Math.ceil(Math.sqrt(len));
+          rows = Math.ceil(len / cols);
+          th = {
+            height: 2 * $this.height() / 3,
+            width: 3 * $this.width() / 4,
+            padding: 15
+          };
+          img = {
+            padding: 6
+          };
+          img.width = img.height = Math.min(th.width / cols - 2 * img.padding, th.height / rows - 2 * img.padding);
+          th.width = (img.width + 2 * img.padding) * cols;
+          th.height = (img.height + 2 * img.padding) * rows;
+          return $this.append($('<div>').addClass('thumbs').css({
+            position: 'absolute',
+            top: -th.height - 2 * th.padding,
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+            left: ($this.width() - th.width) / 2 - th.padding,
+            width: th.width,
+            height: th.height,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            padding: th.padding,
+            display: 'block'
+          }).append($this.find('.silexed').map(function() {
+            var $img;
+            $img = $(this);
+            return $('<img>').attr('src', $img.attr('src')).css({
+              float: 'left',
+              width: img.width,
+              height: img.height,
+              padding: img.padding,
+              opacity: .7
+            }).hover((function() {
+              return $(this).stop().fadeTo(250, 1);
+            }), (function() {
+              return $(this).stop().fadeTo(250, .7);
+            })).click(function() {
+              data.in_transition = true;
+              data.in_grid = false;
+              $this.find('.silexed:visible').fadeOut(data.animation_duration, function() {
+                return $img.fadeIn(data.animation_duration, function() {
+                  return data.in_transition = false;
+                });
+              });
+              $this.find('.thumbs').stop().animate({
+                top: -th.height - 2 * th.padding
+              }, 500);
+              return $this.find('.toolbar').stop().animate({
+                right: 15
+              }, 500);
+            }).get(0);
+          })).animate({
+            top: 0
+          }, 500));
         });
       }
     };
