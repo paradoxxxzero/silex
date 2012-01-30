@@ -15,6 +15,9 @@
                         in_grid: false,
                         settings
                     $this.data 'silex', data
+                if not $this.find('img').length
+                    data.in_transition = true
+                    return
                 $this.css
                     position: 'relative'
                     overflow: 'hidden'
@@ -33,6 +36,7 @@
                                 $img.width data.width
                         else if $img.parent().width() <= $img.width()
                             $img.parent().width $img.width()
+                            $img.parent().parent().width $img.width()
 
                         if data.height
                             if $img.height() >= data.height
@@ -50,7 +54,7 @@
                             ).click ->
                                 $this.silex 'next'
                     )
-                if $this.find('.silexed').length <= 1
+                if $this.find('.silexed').length == 1
                     data.in_transition = true
                     return
                 $this.find('.silexed:not(:first)').hide()
