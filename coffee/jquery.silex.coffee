@@ -8,9 +8,7 @@
                 height: null
             options)
             @each ->
-                $this = $ @
-                data = $this.data 'silex'
-                if not data
+                if not data = ($this = $ @).data 'silex'
                     data = $.extend
                         interval: null
                         in_transition: false,
@@ -18,6 +16,7 @@
                     $this.data 'silex', data
                 $this.css position: 'relative'
                 $this.find('img')
+                    .addClass('silexed')
                     .css(
                         display: 'block'
                         margin: '0 auto'
@@ -47,10 +46,10 @@
                             .click ->
                                 $this.silex('next')
                     )
-                if $this.find('img').length <= 1
+                if $this.find('.silexed').length <= 1
                     data.in_transition = true
                     return
-                $this.find('img:not(:first)').hide()
+                $this.find('.silexed:not(:first)').hide()
                 $this.append(
                     $('<div>')
                     .addClass('toolbar')
@@ -59,8 +58,15 @@
                         top: 0
                         color: 'red'
                     ).append(
-                        $('<a>').text('play').click(-> $this.silex('play')),
-                        $('<a>').text('pause').click(-> $this.silex('pause')),
+                        $('<img>')
+                            .addClass('play')
+                            .attr('src', icons.play)
+                            .hide()
+                            .click(-> $this.silex('play')),
+                        $('<img>')
+                            .addClass('pause')
+                            .attr('src', icons.pause)
+                            .click(-> $this.silex('pause')),
                         $('<a>').text('toggle').click(-> $this.silex('toggle')),
                         $('<a>').text('prev').click(-> $this.silex('prev')),
                         $('<a>').text('next').click(-> $this.silex('next')))
@@ -69,24 +75,20 @@
 
         next: ->
             @each ->
-                $this = $ @
-                data = $this.data 'silex'
-                return if data.in_transition
+                return if (data = ($this = $ @).data 'silex').in_transition
                 data.in_transition = true
-                $this.find('img:visible').fadeOut(data.animation_duration, ->
+                $this.find('.silexed:visible').fadeOut(data.animation_duration, ->
                     next = $(@).next()
                     if not next.length
-                        next = $this.find('img').first()
+                        next = $this.find('.silexed').first()
                     next.fadeIn(data.animation_duration, ->
                         data.in_transition = false
                     ))
         prev: ->
             @each ->
-                $this = $ @
-                data = $this.data 'silex'
-                return if data.in_transition
+                return if (data = ($this = $ @).data 'silex').in_transition
                 data.in_transition = true
-                $this.find('img:visible').fadeOut(data.animation_duration, ->
+                $this.find('.silexed:visible').fadeOut(data.animation_duration, ->
                     prev = $(@).prev()
                     if not prev.length
                         prev = $this.find('img').last()
@@ -95,23 +97,24 @@
                     ))
         play: ->
             @each ->
-                $this = $ @
-                data = $this.data 'silex'
+                data = ($this = $ @).data 'silex'
                 if not data.interval
+                    $this.find('.play').hide()
+                    $this.find('.pause').show()
                     data.interval = setInterval (-> $this.silex('next')), data.duration
 
         pause: ->
             @each ->
-                $this = $ @
-                data = $this.data 'silex'
+                data = ($this = $ @).data 'silex'
                 if data.interval
+                    $this.find('.pause').hide()
+                    $this.find('.play').show()
                     clearInterval data.interval
                     data.interval = null
 
         toggle: ->
             @each ->
-                $this = $ @
-                data = $this.data 'silex'
+                data = ($this = $ @).data 'silex'
                 if data.interval
                     $this.silex('pause')
                 else
