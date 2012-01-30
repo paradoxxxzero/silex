@@ -30,7 +30,8 @@
             $this.data('silex', data);
           }
           $this.css({
-            position: 'relative'
+            position: 'relative',
+            overflow: 'hidden'
           });
           $this.find('img').addClass('silexed').css({
             display: 'block',
@@ -49,12 +50,13 @@
               return $img.parent().height($img.height());
             }
           }).wrapAll($('<div>').addClass('silex-wrapper').css({
-            padding: 20,
+            padding: '20px 20px 40px',
             width: settings.width,
             height: settings.height,
             display: 'table-cell',
             backgroundColor: '#111213',
-            verticalAlign: 'middle'
+            verticalAlign: 'middle',
+            borderRadius: 5
           }).click(function() {
             return $this.silex('next');
           }));
@@ -63,21 +65,38 @@
             return;
           }
           $this.find('.silexed:not(:first)').hide();
-          return $this.append($('<div>').addClass('toolbar').css({
+          $this.append($('<div>').addClass('toolbar').css({
             position: 'absolute',
-            top: 0,
-            color: 'red'
-          }).append($('<img>').addClass('play').attr('src', icons.play).hide().click(function() {
+            bottom: 5,
+            right: -100,
+            backgroundColor: 'black',
+            borderRadius: 5
+          }).append($('<img>').addClass('prev').attr('src', icons.prev).click(function() {
+            return $this.silex('prev');
+          }), $('<img>').addClass('play').attr('src', icons.play).hide().click(function() {
             return $this.silex('play');
           }), $('<img>').addClass('pause').attr('src', icons.pause).click(function() {
             return $this.silex('pause');
-          }), $('<a>').text('toggle').click(function() {
-            return $this.silex('toggle');
-          }), $('<a>').text('prev').click(function() {
-            return $this.silex('prev');
-          }), $('<a>').text('next').click(function() {
+          }), $('<img>').addClass('next').attr('src', icons.next).click(function() {
             return $this.silex('next');
           })));
+          $this.find('.toolbar img').css({
+            opacity: .5,
+            padding: 5
+          }).hover((function() {
+            return $(this).stop().fadeTo(250, .9);
+          }), (function() {
+            return $(this).stop().fadeTo(250, .5);
+          }));
+          return $this.hover((function() {
+            return $this.find('.toolbar').stop().animate({
+              right: 5
+            }, 250);
+          }), (function() {
+            return $this.find('.toolbar').stop().animate({
+              right: -100
+            }, 250);
+          }));
         }).silex('play');
       },
       next: function() {
@@ -103,7 +122,7 @@
           return $this.find('.silexed:visible').fadeOut(data.animation_duration, function() {
             var prev;
             prev = $(this).prev();
-            if (!prev.length) prev = $this.find('img').last();
+            if (!prev.length) prev = $this.find('.silexed').last();
             return prev.fadeIn(data.animation_duration, function() {
               return data.in_transition = false;
             });

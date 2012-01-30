@@ -14,7 +14,9 @@
                         in_transition: false,
                         settings
                     $this.data 'silex', data
-                $this.css position: 'relative'
+                $this.css
+                    position: 'relative'
+                    overflow: 'hidden'
                 $this.find('img')
                     .addClass('silexed')
                     .css(
@@ -36,14 +38,15 @@
                     ).wrapAll(
                         $('<div>')
                             .addClass('silex-wrapper')
-                            .css
-                                padding: 20
+                            .css(
+                                padding: '20px 20px 40px'
                                 width: settings.width
                                 height: settings.height
                                 display: 'table-cell'
                                 backgroundColor: '#111213'
                                 verticalAlign: 'middle'
-                            .click ->
+                                borderRadius: 5
+                            ).click ->
                                 $this.silex('next')
                     )
                 if $this.find('.silexed').length <= 1
@@ -52,25 +55,47 @@
                 $this.find('.silexed:not(:first)').hide()
                 $this.append(
                     $('<div>')
-                    .addClass('toolbar')
+                        .addClass('toolbar')
+                        .css(
+                            position: 'absolute'
+                            bottom: 5
+                            right: -100
+                            backgroundColor: 'black'
+                            borderRadius: 5
+                        ).append(
+                            $('<img>')
+                                .addClass('prev')
+                                .attr('src', icons.prev)
+                                .click(-> $this.silex('prev')),
+                            $('<img>')
+                                .addClass('play')
+                                .attr('src', icons.play)
+                                .hide()
+                                .click(-> $this.silex('play')),
+                            $('<img>')
+                                .addClass('pause')
+                                .attr('src', icons.pause)
+                                .click(-> $this.silex('pause')),
+                            $('<img>')
+                                .addClass('next')
+                                .attr('src', icons.next)
+                                .click(-> $this.silex('next'))
+                        )
+                )
+                $this.find('.toolbar img')
                     .css(
-                        position: 'absolute'
-                        top: 0
-                        color: 'red'
-                    ).append(
-                        $('<img>')
-                            .addClass('play')
-                            .attr('src', icons.play)
-                            .hide()
-                            .click(-> $this.silex('play')),
-                        $('<img>')
-                            .addClass('pause')
-                            .attr('src', icons.pause)
-                            .click(-> $this.silex('pause')),
-                        $('<a>').text('toggle').click(-> $this.silex('toggle')),
-                        $('<a>').text('prev').click(-> $this.silex('prev')),
-                        $('<a>').text('next').click(-> $this.silex('next')))
+                        opacity: .5
+                        padding: 5
+                    ).hover(
+                        (-> $(@).stop().fadeTo(250, .9)),
+                        (-> $(@).stop().fadeTo(250, .5))
                     )
+                $this.hover(
+                    (->
+                        $this.find('.toolbar').stop().animate(right: 5, 250)),
+                    (->
+                        $this.find('.toolbar').stop().animate(right: -100, 250))
+                )
             .silex('play')
 
         next: ->
@@ -91,7 +116,7 @@
                 $this.find('.silexed:visible').fadeOut(data.animation_duration, ->
                     prev = $(@).prev()
                     if not prev.length
-                        prev = $this.find('img').last()
+                        prev = $this.find('.silexed').last()
                     prev.fadeIn(data.animation_duration, ->
                         data.in_transition = false
                     ))
