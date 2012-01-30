@@ -32,7 +32,10 @@
           }
           $this.css({
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            padding: 20,
+            borderRadius: 10,
+            backgroundColor: '#111213'
           });
           $this.find('img').addClass('silexed').css({
             display: 'block',
@@ -51,13 +54,10 @@
               return $img.parent().height($img.height());
             }
           }).wrapAll($('<div>').addClass('silex-wrapper').css({
-            padding: 20,
-            width: settings.width,
-            height: settings.height,
             display: 'table-cell',
-            backgroundColor: '#111213',
             verticalAlign: 'middle',
-            borderRadius: 10
+            height: settings.height,
+            width: settings.width
           }).click(function() {
             return $this.silex('next');
           }));
@@ -208,10 +208,10 @@
             top: -th.height - 2 * th.padding,
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
-            left: ($this.width() - th.width) / 2 - th.padding,
+            left: ($this.width() - th.width) / 2,
             width: th.width,
             height: th.height,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
             padding: th.padding,
             display: 'block'
           }).append($this.find('.silexed').map(function() {

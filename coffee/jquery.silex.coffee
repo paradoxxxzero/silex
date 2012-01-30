@@ -18,6 +18,9 @@
                 $this.css
                     position: 'relative'
                     overflow: 'hidden'
+                    padding: 20
+                    borderRadius: 10
+                    backgroundColor: '#111213'
                 $this.find('img')
                     .addClass('silexed')
                     .css(
@@ -40,13 +43,10 @@
                         $('<div>')
                             .addClass('silex-wrapper')
                             .css(
-                                padding: 20
-                                width: settings.width
-                                height: settings.height
                                 display: 'table-cell'
-                                backgroundColor: '#111213'
                                 verticalAlign: 'middle'
-                                borderRadius: 10
+                                height: settings.height
+                                width: settings.width
                             ).click ->
                                 $this.silex 'next'
                     )
@@ -182,10 +182,10 @@
                             top: - th.height - 2 * th.padding
                             borderBottomLeftRadius: 20
                             borderBottomRightRadius: 20
-                            left: ($this.width() - th.width) / 2  - th.padding
+                            left: ($this.width() - th.width) / 2
                             width: th.width
                             height: th.height
-                            backgroundColor: 'rgba(0, 0, 0, 0.7)'
+                            backgroundColor: 'rgba(0, 0, 0, 0.9)'
                             padding: th.padding
                             display: 'block'
                         ).append(
@@ -194,7 +194,6 @@
                                 $('<img>')
                                     .attr('src', $img.attr('src'))
                                     .css(
-                                        # display: 'inline-block'
                                         float: 'left'
                                         width: img.width
                                         height: img.height
@@ -219,7 +218,6 @@
                                 )
                         ).animate(top: 0, 500)
                 )
-
 
 
     $.fn.silex = (method) ->
