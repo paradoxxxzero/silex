@@ -24,7 +24,7 @@
           _ref = ['play', 'grid', 'next', 'prev', 'pause'];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             icon = _ref[_i];
-            icons[icon] = "https://github.com/paradoxxxzero/silex/raw/master/_icons_for_ie/" + icon + ".jpg";
+            icons[icon] = "https://github.com/paradoxxxzero/silex/raw/master/_icons_for_ie/" + icon + ".png";
           }
         }
         return this.each(function() {

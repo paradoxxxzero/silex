@@ -10,7 +10,7 @@
             if $.browser.msie and $.browser.version <= 7
                 # Insert your images here if you want ie<7 support
                 for icon in ['play', 'grid', 'next', 'prev', 'pause']
-                    icons[icon] = "https://github.com/paradoxxxzero/silex/raw/master/_icons_for_ie/#{icon}.jpg"
+                    icons[icon] = "https://github.com/paradoxxxzero/silex/raw/master/_icons_for_ie/#{icon}.png"
             @each ->
                 if not data = ($this = $ @).data 'silex'
                     data = $.extend
