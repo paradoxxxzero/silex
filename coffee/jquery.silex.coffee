@@ -110,7 +110,7 @@
                         return if data.in_grid
                         $this.find('.toolbar').stop().animate(right: 15, 500)),
                     (->
-                        $this.find('.toolbar').stop().animate(right: -100, 500))
+                        $this.find('.toolbar').stop().animate(right: -120, 500))
                 )
             .silex('play')
 
