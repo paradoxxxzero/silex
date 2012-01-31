@@ -13,13 +13,20 @@
     var methods;
     methods = {
       init: function(options) {
-        var settings;
+        var icon, settings, _i, _len, _ref;
         settings = $.extend({
           duration: 5000,
           animation_duration: 500,
           width: null,
           height: null
         }, options);
+        if ($.browser.msie && $.browser.version <= 7) {
+          _ref = ['play', 'grid', 'next', 'prev', 'pause'];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            icon = _ref[_i];
+            icons[icon] = "https://github.com/paradoxxxzero/silex/raw/master/_icons_for_ie/" + icon + ".jpg";
+          }
+        }
         return this.each(function() {
           var $this, data;
           if (!(data = ($this = $(this)).data('silex'))) {
@@ -70,7 +77,8 @@
             data.in_transition = true;
             return;
           }
-          $this.find('.silexed:not(:first)').hide();
+          $this.find('.silexed').hide();
+          $this.find('.silexed').first().show();
           $this.append($('<div>').addClass('toolbar').css({
             position: 'absolute',
             height: 26,
@@ -216,7 +224,7 @@
             left: ($this.width() - th.width) / 2,
             width: th.width,
             height: th.height,
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            backgroundColor: $.support.opacity ? 'rgba(0, 0, 0, 0.9)' : 'black',
             padding: th.padding,
             display: 'block'
           }).append($this.find('.silexed').map(function() {

@@ -7,6 +7,10 @@
                 width: null
                 height: null
             options)
+            if $.browser.msie and $.browser.version <= 7
+                # Insert your images here if you want ie<7 support
+                for icon in ['play', 'grid', 'next', 'prev', 'pause']
+                    icons[icon] = "https://github.com/paradoxxxzero/silex/raw/master/_icons_for_ie/#{icon}.jpg"
             @each ->
                 if not data = ($this = $ @).data 'silex'
                     data = $.extend
@@ -57,7 +61,8 @@
                 if $this.find('.silexed').length == 1
                     data.in_transition = true
                     return
-                $this.find('.silexed:not(:first)').hide()
+                $this.find('.silexed').hide()
+                $this.find('.silexed').first().show()
                 $this.append(
                     $('<div>')
                         .addClass('toolbar')
@@ -189,7 +194,7 @@
                             left: ($this.width() - th.width) / 2
                             width: th.width
                             height: th.height
-                            backgroundColor: 'rgba(0, 0, 0, 0.9)'
+                            backgroundColor: if $.support.opacity then 'rgba(0, 0, 0, 0.9)' else 'black'
                             padding: th.padding
                             display: 'block'
                         ).append(
