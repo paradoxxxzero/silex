@@ -69,7 +69,7 @@
             position: 'absolute',
             height: 26,
             bottom: 10,
-            right: -100,
+            right: -120,
             backgroundColor: 'black',
             borderRadius: 5
           }).append($('<a>').addClass('silex-icon').addClass('grid').click(function() {
