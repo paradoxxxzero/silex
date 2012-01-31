@@ -100,7 +100,7 @@
             }, 500);
           }), (function() {
             return $this.find('.toolbar').stop().animate({
-              right: -100
+              right: -120
             }, 500);
           }));
         }).silex('play');

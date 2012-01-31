@@ -166,7 +166,7 @@
                 data = ($this = $ @).data 'silex'
                 return if data.in_grid
                 data.in_grid = true
-                $this.find('.toolbar').stop().animate(right: -100, 500)
+                $this.find('.toolbar').stop().animate(right: -120, 500)
                 if ($thm = $this.find('.thumbs')).length
                     $thm.animate(top: 0, 500)
                     return
