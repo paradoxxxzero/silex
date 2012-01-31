@@ -182,7 +182,7 @@
           if (data.in_grid) return;
           data.in_grid = true;
           $this.find('.toolbar').stop().animate({
-            right: -100
+            right: -120
           }, 500);
           if (($thm = $this.find('.thumbs')).length) {
             $thm.animate({
