@@ -46,7 +46,9 @@
             overflow: 'hidden',
             padding: 20,
             borderRadius: 10,
-            backgroundColor: '#111213'
+            backgroundColor: '#111213',
+            width: data.width,
+            height: data.height
           });
           $this.find('img').addClass('silexed').css({
             display: 'block',
