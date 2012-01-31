@@ -7,10 +7,6 @@
                 width: null
                 height: null
             options)
-            if $.browser.msie and $.browser.version <= 7
-                # Insert your images here if you want ie<7 support
-                for icon in ['play', 'grid', 'next', 'prev', 'pause']
-                    icons[icon] = "https://github.com/paradoxxxzero/silex/raw/master/_icons_for_ie/#{icon}.png"
             @each ->
                 if not data = ($this = $ @).data 'silex'
                     data = $.extend
@@ -76,33 +72,35 @@
                             backgroundColor: 'black'
                             borderRadius: 5
                         ).append(
-                            $('<img>')
+                            $('<a>')
+                                .addClass('silex-icon')
                                 .addClass('grid')
-                                .attr('src', icons.grid)
                                 .click(-> $this.silex('grid')),
-                            $('<img>')
+                            $('<a>')
+                                .addClass('silex-icon')
                                 .addClass('prev')
-                                .attr('src', icons.prev)
                                 .click(-> $this.silex('prev')),
-                            $('<img>')
+                            $('<a>')
+                                .addClass('silex-icon')
                                 .addClass('play')
-                                .attr('src', icons.play)
                                 .hide()
                                 .click(-> $this.silex('play')),
-                            $('<img>')
+                            $('<a>')
+                                .addClass('silex-icon')
                                 .addClass('pause')
-                                .attr('src', icons.pause)
                                 .click(-> $this.silex('pause')),
-                            $('<img>')
+                            $('<a>')
+                                .addClass('silex-icon')
                                 .addClass('next')
-                                .attr('src', icons.next)
                                 .click(-> $this.silex('next'))
                         )
                 )
-                $this.find('.toolbar img')
+                $this.find('.toolbar a')
                     .css(
                         opacity: .5
-                        padding: 5
+                        margin: 5
+                        float: 'left'
+                        display: 'block'
                     ).hover(
                         (-> $(@).is(':visible') and $(@).stop().fadeTo(250, .9)),
                         (-> $(@).is(':visible') and $(@).stop().fadeTo(250, .5))

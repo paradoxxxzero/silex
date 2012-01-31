@@ -11,7 +11,6 @@ all_coffee_file = "#{root}/dist/jquery.silex.coffee"
 coffee_opts = "--output #{root}/dist/ --compile #{all_coffee_file} "
 
 coffee_files = [
-    'images'
     'jquery.silex'
 ]
 
